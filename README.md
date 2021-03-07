@@ -3,7 +3,7 @@
 ## What does this script do?
 
 This is a command line tool for updating expired SSL certificates with certbot.
-The script gets domain names from nginx sites enabled directory. After that it checks certificates expiration date with *openssl*. If certificate expiration date 
+The script gets domain names from nginx sites enabled directory. After that it checks expiration date for every certificate with *openssl*. If the certificate's expiration date is closer to current date then number of grace days, script performs update for it. 
 
 The script assumes that the certificate was issued using certbot with nginx plugin.
 

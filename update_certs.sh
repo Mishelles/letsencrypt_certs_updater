@@ -43,8 +43,7 @@ for filename in $(ls $SITES_ENABLED_DIR); do
             diff="$((${certificate_end_date}-${current_date}))"
             if test "${diff}" -lt "$((${GRACE_DAYS}*24*3600))";
             then
-                #certbot --nginx certonly -n --force-renewal -d $filename > 2>/dev/null
-                echo 'certbot'
+                certbot --nginx certonly -n --force-renewal -d $filename > 2>/dev/null
                 if [ $? -eq 0 ]; then
                     certificate_data=`echo | openssl x509 -enddate -noout -in "$LETSENCRYPT_CERTS_DIR$filename/fullchain.pem" | sed -e 's#notAfter=##'`
                     certificate_end_date=`date -d "${certificate_data}" '+%Y-%m-%d'`
@@ -65,11 +64,9 @@ for filename in $(ls $SITES_ENABLED_DIR); do
 done
 
 # Restart nginx to apply newly generated certificates
-# nginx -t 2>/dev/null
-echo 'nginx -t'
+nginx -t 2>/dev/null
 if [ $? -eq 0 ]; then
-    # service nginx restart 2>/dev/null
-    echo 'nginx restart'
+    service nginx restart 2>/dev/null
     echo "Script successfully finished."
     echo "Certificates updated for ${#affected_domains[@]} domains"
     printf '%s\n' "${affected_domains[@]}"
